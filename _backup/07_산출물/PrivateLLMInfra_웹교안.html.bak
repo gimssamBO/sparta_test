@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private LLM Infra 웹 교안</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --red:#FA0030;
+    --red-dark:#C8002A;
+    --wine:#850028;
+    --wine-deep:#5E011D;
+    --ink:#141617;
+    --white:#FFFFFF;
+    --rose-1:#E7859E;
+    --rose-2:#CE476D;
+    --paper:#FAF7F8;
+    --line:#EAE0E3;
+    --muted:#726A6D;
+    --card:#FFFFFF;
+    --tint:#FDECEF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,-apple-system,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.65;
+  }
+  a{color:inherit;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:var(--white);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:1180px; margin:0 auto;
+    display:flex; align-items:center; gap:28px;
+    padding:14px 24px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-weight:800; letter-spacing:-0.02em;
+    white-space:nowrap;
+  }
+  .brand .badge{
+    background:var(--red);
+    color:var(--white);
+    font-size:13px; font-weight:800;
+    padding:5px 10px;
+    border-radius:6px;
+  }
+  .brand .title{font-size:15px; color:var(--ink);}
+  .brand .title small{display:block; font-weight:500; color:var(--muted); font-size:11px;}
+
+  .tabs{
+    display:flex; gap:4px; flex:1; overflow-x:auto;
+  }
+  .tab{
+    appearance:none; border:none; background:transparent; cursor:pointer;
+    font-family:inherit; font-size:14px; font-weight:600; color:var(--muted);
+    padding:10px 16px; border-radius:8px; white-space:nowrap;
+    transition:background .15s, color .15s;
+  }
+  .tab:hover{background:var(--tint); color:var(--wine);}
+  .tab.active{background:var(--red); color:var(--white);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(255,255,255,0.06) 0, transparent 45%),
+      linear-gradient(155deg, var(--wine) 0%, var(--wine-deep) 100%);
+    color:var(--white);
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size:120px 120px;
+    mask-image:radial-gradient(ellipse at center, black 40%, transparent 78%);
+  }
+  .hero-inner{
+    position:relative;
+    max-width:1180px; margin:0 auto;
+    padding:56px 24px 40px;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-size:12px; font-weight:700; letter-spacing:.06em;
+    background:rgba(255,255,255,0.14);
+    border:1px solid rgba(255,255,255,0.28);
+    padding:6px 12px; border-radius:999px;
+    margin-bottom:16px;
+  }
+  .hero h1{
+    font-size:clamp(26px, 4vw, 38px);
+    font-weight:800; letter-spacing:-0.02em;
+    margin:0 0 12px;
+  }
+  .hero p.lead{
+    max-width:640px; color:rgba(255,255,255,0.86);
+    font-size:15px; margin:0 0 28px;
+  }
+  .hero-meta{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+    gap:1px; background:rgba(255,255,255,0.16);
+    border:1px solid rgba(255,255,255,0.2); border-radius:14px;
+    overflow:hidden;
+  }
+  .hero-meta .cell{
+    background:rgba(255,255,255,0.04);
+    padding:14px 18px;
+  }
+  .hero-meta .cell .k{font-size:11px; color:rgba(255,255,255,0.65); font-weight:600; margin-bottom:4px;}
+  .hero-meta .cell .v{font-size:14px; font-weight:700;}
+
+  /* ---------- Layout ---------- */
+  .page{max-width:1180px; margin:0 auto; padding:32px 24px 80px;}
+  .section{display:none;}
+  .section.active{display:block; animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    flex-wrap:wrap; gap:8px;
+    margin-bottom:20px;
+  }
+  .section-head h2{
+    font-size:22px; font-weight:800; margin:0; letter-spacing:-0.01em;
+  }
+  .section-head .part-tag{
+    font-size:12px; font-weight:800; color:var(--red);
+    background:var(--tint); padding:5px 10px; border-radius:6px;
+  }
+  .section-sub{color:var(--muted); font-size:13.5px; margin:-12px 0 24px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px 24px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    font-size:16px; font-weight:800; margin:0 0 12px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .card h3 .num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:6px;
+    background:var(--wine); color:var(--white);
+    font-size:11px; font-weight:800;
+  }
+
+  .goal-box{
+    background:linear-gradient(135deg, var(--rose-1), var(--rose-2));
+    color:var(--white);
+    border-radius:16px;
+    padding:22px 24px;
+    margin-bottom:24px;
+  }
+  .goal-box h3{margin:0 0 12px; font-size:14px; font-weight:800; letter-spacing:.02em;}
+  .goal-box ul{margin:0; padding-left:18px;}
+  .goal-box li{margin-bottom:6px; font-size:14px;}
+
+  table{
+    width:100%; border-collapse:collapse; font-size:13.5px;
+    margin:4px 0 4px;
+  }
+  th, td{
+    text-align:left; padding:10px 12px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  th{
+    background:var(--tint); color:var(--wine);
+    font-weight:800; font-size:12.5px;
+  }
+  tr:last-child td{border-bottom:none;}
+
+  .term-row{
+    display:flex; gap:12px; align-items:flex-start;
+    padding:10px 0; border-bottom:1px dashed var(--line);
+  }
+  .term-row:last-child{border-bottom:none;}
+  .term-chip{
+    flex:0 0 auto;
+    background:var(--ink); color:var(--white);
+    font-size:12px; font-weight:700;
+    padding:4px 10px; border-radius:999px;
+    white-space:nowrap;
+  }
+  .term-desc{font-size:13.5px; color:#2b2b2c;}
+
+  .tip{
+    background:var(--paper);
+    border-left:4px solid var(--red);
+    border-radius:0 12px 12px 0;
+    padding:16px 18px;
+    font-size:13.5px; color:#3a3436;
+  }
+  .tip strong{color:var(--wine);}
+
+  ol.flow{margin:0; padding-left:20px;}
+  ol.flow li{margin-bottom:8px; font-size:14px;}
+
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  @media (max-width:760px){
+    .grid-2{grid-template-columns:1fr;}
+    .topbar-inner{flex-wrap:wrap; padding:12px 16px;}
+    .hero-inner{padding:40px 16px 32px;}
+    .page{padding:24px 16px 60px;}
+  }
+
+  .note-list{margin:0; padding-left:18px; font-size:13.5px; color:#3a3436;}
+  .note-list li{margin-bottom:6px;}
+
+  .example-pill{
+    display:inline-block; font-size:12.5px; font-weight:700;
+    background:var(--white); border:1px solid var(--line);
+    padding:5px 11px; border-radius:999px; margin:2px 4px 2px 0;
+  }
+
+  footer{
+    text-align:center; color:var(--muted); font-size:12px;
+    padding:24px; border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="badge">SPARTA</span>
+      <span class="title">Private LLM Infra<small>AI 튜터 시범강의 · 웹 교안</small></span>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-target="s-overview">개요</button>
+      <button class="tab" data-target="s-part1">PART 1. 클라우드 인프라</button>
+      <button class="tab" data-target="s-part2">PART 2. Private LLM 서빙</button>
+      <button class="tab" data-target="s-part3">PART 3. LLMOps</button>
+      <button class="tab" data-target="s-guide">시연 안내</button>
+    </div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">팀스파르타 AI 튜터 채용 시범강의</span>
+    <h1>Private LLM Infra</h1>
+    <p class="lead">클라우드 인프라, Private LLM 서빙, LLMOps 세 개의 축으로 Private LLM을 기업 환경에 배포할 때 필요한 기술을 살펴본다.</p>
+    <div class="hero-meta">
+      <div class="cell"><div class="k">주제</div><div class="v">인프라 / 서빙 / LLMOps</div></div>
+      <div class="cell"><div class="k">대상</div><div class="v">대학교 IT 계열 전공자</div></div>
+      <div class="cell"><div class="k">구성</div><div class="v">개념 설명 + 시연</div></div>
+      <div class="cell"><div class="k">분량</div><div class="v">파트별 15~20분</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ============ 개요 ============ -->
+  <section class="section active" id="s-overview">
+    <div class="section-head"><h2>강의 개요</h2></div>
+    <p class="section-sub">이번 강의에서는 Private LLM Infra를 세 개의 축으로 나누어 살펴본다.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3><span class="num">1</span>인프라</h3>
+        <p style="margin:0; font-size:13.5px; color:#3a3436;">모델이 올라갈 실행 기반. On-prem, Cloud, Hybrid 중 무엇을 선택할지, 그 위에서 Docker와 Kubernetes가 어떤 역할을 하는지 다룬다.</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">2</span>서빙</h3>
+        <p style="margin:0; font-size:13.5px; color:#3a3436;">GPU 자원을 효율적으로 활용하는 추론 구조. 서빙 병목 지점과 vLLM, 양자화 전략을 다룬다.</p>
+      </div>
+      <div class="card">
+        <h3><span class="num">3</span>운영</h3>
+        <p style="margin:0; font-size:13.5px; color:#3a3436;">배포 이후 품질, 보안, 장애를 관리하는 체계. 관측성, 보안 리스크, 가드레일을 다룬다.</p>
+      </div>
+      <div class="card">
+        <h3>강의 개요표</h3>
+        <table>
+          <tr><th>목표</th><td>Private LLM을 기업 환경에 배포할 때 필요한 기술 축을 이해한다</td></tr>
+          <tr><th>대상</th><td>대학교 IT 계열 전공자</td></tr>
+          <tr><th>구성</th><td>개념 설명 + 시연</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>파트 구성</h3>
+      <table>
+        <tr><th>파트</th><th>제목</th><th>핵심 축</th><th>비고</th></tr>
+        <tr><td>PART 1</td><td>클라우드 인프라</td><td>인프라</td><td>팀스파르타 제공, 원본 유지</td></tr>
+        <tr><td>PART 2</td><td>Private LLM 서빙</td><td>서빙</td><td>학습목표 기반 신규 구성</td></tr>
+        <tr><td>PART 3</td><td>LLMOps</td><td>운영</td><td>학습목표 기반 신규 구성</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="s-part1">
+    <div class="section-head">
+      <h2>PART 1. 클라우드 인프라</h2>
+      <span class="part-tag">팀스파르타 제공 · 원본 유지</span>
+    </div>
+
+    <div class="goal-box">
+      <h3>학습 목표</h3>
+      <ul>
+        <li>On-prem / Cloud / Hybrid 인프라의 차이를 설명할 수 있다</li>
+        <li>Docker와 Kubernetes가 LLM 서빙에서 하는 역할을 이해한다</li>
+        <li>IaC 기반 인프라 구성의 필요성을 설명할 수 있다</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">1-1</span>인프라 유형 비교</h3>
+      <table>
+        <tr><th>유형</th><th>정의</th><th>특징</th></tr>
+        <tr><td>On-prem</td><td>자체 서버실·데이터센터에 직접 GPU를 구축</td><td>초기 투자는 크지만 데이터 통제권이 높음</td></tr>
+        <tr><td>Cloud</td><td>AWS, GCP, Azure 등 클라우드 GPU 인스턴스 활용</td><td>초기 비용이 낮고 확장이 빠르지만 사용량에 따라 비용 증가</td></tr>
+        <tr><td>Hybrid</td><td>On-prem과 Cloud를 병행</td><td>민감 데이터는 On-prem, 트래픽 급증 시 Cloud로 확장(버스팅)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">1-2</span>Docker와 Kubernetes</h3>
+      <div class="term-row"><span class="term-chip">Docker</span><span class="term-desc">서빙 환경 패키징 및 재현성 확보 — 모델·라이브러리·의존성을 하나의 이미지로 묶어 어떤 서버에서도 동일하게 실행</span></div>
+      <div class="term-row"><span class="term-chip">Kubernetes</span><span class="term-desc">GPU 자원 배치, 확장, 복구 자동화 — 여러 GPU 서버를 클러스터로 묶어 트래픽에 따라 자동 확장/복구</span></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">1-3</span>IaC (Infrastructure as Code)</h3>
+      <p style="font-size:13.5px; color:#3a3436; margin-top:0;">수동으로 서버나 네트워크를 설정하는 대신, 코드를 작성해 인프라를 생성하고 관리하는 기술.</p>
+      <div class="term-row"><span class="term-chip">Terraform</span><span class="term-desc">클러스터, 네트워크, GPU 노드풀 등 인프라 구성</span></div>
+      <div class="term-row"><span class="term-chip">Ansible</span><span class="term-desc">드라이버, CUDA, 에이전트 등 서버 설정 자동화</span></div>
+    </div>
+
+    <div class="tip"><strong>진행 팁.</strong> On-prem/Cloud/Hybrid는 "집을 사는 것(On-prem) vs 빌리는 것(Cloud) vs 상황에 따라 섞는 것(Hybrid)"에 비유하면 이해가 빠르다. Docker와 Kubernetes는 "포장(Docker) → 배치·운영(Kubernetes)" 흐름으로 설명한다.</div>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="s-part2">
+    <div class="section-head">
+      <h2>PART 2. Private LLM 서빙</h2>
+      <span class="part-tag">학습목표 기반 구성</span>
+    </div>
+
+    <div class="goal-box">
+      <h3>학습 목표</h3>
+      <ul>
+        <li>LLM 서빙의 병목이 어디서 발생하는지 설명할 수 있다</li>
+        <li>vLLM의 PagedAttention이 왜 중요한지 이해한다</li>
+        <li>양자화와 배포 전략의 선택 기준을 설명할 수 있다</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">2-1</span>서빙의 병목 지점</h3>
+      <table>
+        <tr><th>단계</th><th>설명</th><th>특징</th></tr>
+        <tr><td>Prefill</td><td>입력 프롬프트 전체를 한 번에 병렬 처리하는 첫 단계</td><td>GPU 연산을 병렬로 꽉 채워 써 상대적으로 빠름</td></tr>
+        <tr><td>Decode</td><td>토큰을 하나씩 순차 생성하는 단계</td><td>매번 가중치와 KV 캐시를 다시 읽어 서빙 속도의 실질적 병목</td></tr>
+      </table>
+      <div class="term-row" style="margin-top:8px;"><span class="term-chip">KV 캐시</span><span class="term-desc">이전 토큰의 계산 결과를 저장해 재사용하는 메모리 공간. 대화가 길어질수록 커짐</span></div>
+      <div class="term-row"><span class="term-chip">Throughput / Latency</span><span class="term-desc">처리량(단위 시간당 처리 요청 수)과 지연시간은 서로 트레이드오프 관계</span></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">2-2</span>vLLM과 PagedAttention</h3>
+      <div class="term-row"><span class="term-chip">PagedAttention</span><span class="term-desc">OS의 페이지 메모리 관리 방식을 KV 캐시에 적용해, 필요한 만큼만 블록 단위로 할당</span></div>
+      <div class="term-row"><span class="term-chip">Continuous Batching</span><span class="term-desc">끝난 요청 자리를 즉시 새 요청으로 채워 GPU 유휴 시간을 최소화</span></div>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">2-3</span>양자화와 배포 전략</h3>
+      <div class="term-row"><span class="term-chip">양자화</span><span class="term-desc">모델 가중치의 비트 수를 줄여(FP16 → INT8/INT4) 메모리와 속도를 절약</span></div>
+      <div class="term-row"><span class="term-chip">GPTQ / AWQ</span><span class="term-desc">정확도 손실을 최소화하며 비트 수를 줄이는 대표적 양자화 기법</span></div>
+      <div class="term-row"><span class="term-chip">Tensor / Pipeline Parallelism</span><span class="term-desc">모델이 GPU 한 장에 안 들어갈 때 여러 GPU에 나눠 올리는 방식</span></div>
+    </div>
+
+    <div class="tip"><strong>진행 팁.</strong> Prefill/Decode는 "한 번에 다 읽기 vs 한 글자씩 쓰기"로, PagedAttention은 "고정 좌석 예약 vs 필요한 만큼만 좌석 배정"에 비유하면 직관적으로 전달된다.</div>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="s-part3">
+    <div class="section-head">
+      <h2>PART 3. LLMOps</h2>
+      <span class="part-tag">학습목표 기반 구성</span>
+    </div>
+
+    <div class="goal-box">
+      <h3>학습 목표</h3>
+      <ul>
+        <li>LLM 운영에서 관측성, 보안, 통제의 중요성을 설명할 수 있다</li>
+        <li>주요 리스크를 이해하고 대응 구조를 설명할 수 있다</li>
+        <li>가드레일의 역할을 코드 수준에서 이해할 수 있다</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">3-1</span>관측성 (Observability)</h3>
+      <table>
+        <tr><th>요소</th><th>설명</th></tr>
+        <tr><td>로그</td><td>요청 하나하나의 상세 기록. 문제 발생 시 원인 추적에 사용</td></tr>
+        <tr><td>메트릭</td><td>TTFT · TPOT · 지연시간 · 비용 등 숫자 추이. 전체 흐름 파악에 사용</td></tr>
+        <tr><td>트레이싱</td><td>RAG처럼 여러 단계로 이루어진 파이프라인에서 어느 단계가 느린지 구분</td></tr>
+        <tr><td>품질 평가</td><td>사용자 피드백, 정답이 있는 경우 정량 평가, 정답이 없는 경우 LLM-as-judge를 조합해 확인</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">3-2</span>보안과 통제</h3>
+      <div class="term-row"><span class="term-chip">프롬프트 인젝션 (Direct)</span><span class="term-desc">사용자가 직접 입력을 통해 시스템 지시를 무력화하려는 시도</span></div>
+      <div class="term-row"><span class="term-chip">프롬프트 인젝션 (Indirect)</span><span class="term-desc">외부 문서에 숨은 지시로 모델을 유도하는 방식</span></div>
+      <p style="font-size:13.5px; color:#3a3436; margin:12px 0 0;">기본 대응은 시스템 프롬프트·사용자 입력·외부 문서의 역할을 명확히 분리하고, 외부 문서는 참고 데이터로만 취급하는 것이다.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">3-3</span>가드레일 (Guardrail)</h3>
+      <p style="font-size:13.5px; color:#3a3436; margin-top:0;">모델을 다시 학습시키지 않고, 입력과 출력을 검증하는 안전장치 계층을 추가하는 방법.</p>
+      <ol class="flow">
+        <li>입력 가드레일 — 사용자 입력에 위험한 요청이 있는지 먼저 점검</li>
+        <li>시스템 프롬프트 설계 — 역할과 제약을 명확히 정의</li>
+        <li>출력 가드레일 — 생성된 응답에 민감 정보나 정책 위반이 없는지 검증</li>
+        <li>구조화된 출력 검증 — 응답 형식이 기대한 구조를 따르는지 확인</li>
+      </ol>
+    </div>
+
+    <div class="tip"><strong>진행 팁.</strong> 로그/메트릭/트레이싱은 "진료 기록 / 활력징후 그래프 / MRI 촬영"에, 가드레일 4단계는 "문 앞 검문 → 행동 강령 → 퇴실 검사 → 서류 양식 확인"에 비유하면 기억하기 쉽다.</div>
+  </section>
+
+  <!-- ============ 시연 안내 ============ -->
+  <section class="section" id="s-guide">
+    <div class="section-head"><h2>강의 시연 안내</h2></div>
+
+    <div class="card">
+      <ul class="note-list">
+        <li>시연은 본 교안을 화면 공유한 상태로, 실제 수강생에게 설명하듯 진행한다.</li>
+        <li>재구성하거나 추가 자료를 활용해도 무방하다 (자유 형식).</li>
+        <li>실제 시연에서는 모든 파트를 다뤄도, 일부만 설명해도 된다.</li>
+        <li>20분 분량에 맞춰 자유롭게 준비한다.</li>
+        <li>Part 1은 팀스파르타에서 완성해 제공한 교안이다.</li>
+        <li>Part 2, 3은 학습 목표를 바탕으로 강의를 구성한다.</li>
+        <li>시연 후 질의응답(15분 내외)을 진행한다.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>시연 구성 예시</h3>
+      <span class="example-pill">예시 1 · Part 2만 설명</span>
+      <span class="example-pill">예시 2 · Part 3만 설명</span>
+      <span class="example-pill">예시 3 · 모든 파트 설명</span>
+    </div>
+  </section>
+
+</div>
+
+<footer>Private LLM Infra 웹 교안 · 팀스파르타 AI 튜터 채용 시범강의용</footer>
+
+<script>
+  var tabs = document.querySelectorAll('.tab');
+  var sections = document.querySelectorAll('.section');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      sections.forEach(function(s){ s.classList.remove('active'); });
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+</script>
+
+</body>
+</html>

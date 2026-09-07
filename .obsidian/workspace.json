@@ -1,0 +1,242 @@
+{
+  "main": {
+    "id": "988b926f72577dcd",
+    "type": "split",
+    "children": [
+      {
+        "id": "a0fdca4e8da94fe4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "15c201bd40082105",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01_교안/01_Part1_클라우드인프라.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "01_Part1_클라우드인프라"
+            }
+          },
+          {
+            "id": "39ddb582f6b9f539",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01_교안/02_Part2_PrivateLLM서빙.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "02_Part2_PrivateLLM서빙"
+            }
+          },
+          {
+            "id": "33ce6a1ff412e4c5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01_교안/03_Part3_LLMOps.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "03_Part3_LLMOps"
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "08976b4f8b34b3c6",
+    "type": "split",
+    "children": [
+      {
+        "id": "6e496070a3dff98a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f7c7066e7102e16d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "파일 탐색기"
+            }
+          },
+          {
+            "id": "4d354c9f08124282",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "검색"
+            }
+          },
+          {
+            "id": "50ed116942d1ca11",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "북마크"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "5234756714cd4540",
+    "type": "split",
+    "children": [
+      {
+        "id": "88000fc56c87eb58",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d666404aad4bcf8f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "01_교안/01_Part1_클라우드인프라.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "백링크"
+            }
+          },
+          {
+            "id": "1d84654a1914781e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "01_교안/01_Part1_클라우드인프라.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "나가는 링크"
+            }
+          },
+          {
+            "id": "4c0bb9cab62136ab",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "태그"
+            }
+          },
+          {
+            "id": "28b9246307c3be3d",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "모든 속성"
+            }
+          },
+          {
+            "id": "f82ea3f2cd4e9f26",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "01_교안/01_Part1_클라우드인프라.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "개요"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:빠른 전환기 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 일일 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false,
+      "bases:새 베이스 생성하기": false
+    }
+  },
+  "active": "33ce6a1ff412e4c5",
+  "lastOpenFiles": [
+    "GitHub_배포용/README.md",
+    "GitHub_배포용/pdf/PrivateLLMInfra_Part3_LLMOps.pdf",
+    "GitHub_배포용/pdf/PrivateLLMInfra_Part2_PrivateLLM서빙.pdf",
+    "GitHub_배포용/pdf/PrivateLLMInfra_Part1_클라우드인프라.pdf",
+    "GitHub_배포용/index.html",
+    "GitHub_배포용/pdf",
+    "GitHub_배포용",
+    "07_산출물/PrivateLLMInfra_Part3_LLMOps.pdf",
+    "07_산출물/PrivateLLMInfra_Part2_PrivateLLM서빙.pdf",
+    "07_산출물/PrivateLLMInfra_Part1_클라우드인프라.pdf",
+    "_backup/07_산출물/PrivateLLMInfra_웹교안.20260907_072702.bak.html",
+    "01_교안/02_Part2_PrivateLLM서빙.md",
+    "01_교안/03_Part3_LLMOps.md",
+    "02_이미지/Pasted image 20260907145420.png",
+    "01_교안/01_Part1_클라우드인프라.md",
+    "Pasted image 20260907145420.png",
+    "01_교안/00_개요.md",
+    "README.md",
+    "스파르타_시범강의/20260904_PrivateLLMInfra_시범강의.md"
+  ]
+}

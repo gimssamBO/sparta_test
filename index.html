@@ -352,35 +352,6 @@
       <tr><td>PART 3</td><td>LLMOps</td><td>학습목표 기반 신규 구성</td></tr>
       </table>
     </div>
-
-    <div class="card">
-      <h3>전체 진행 시나리오 (한 파트만 시연하는 경우, 약 20분)</h3>
-      <table class="time-table">
-      <tr><th>단계</th><th>시간</th><th>내용</th></tr>
-      <tr><td>오프닝</td><td>1분</td><td>자기소개 + 오늘 다룰 파트와 학습목표 안내</td></tr>
-      <tr><td>도입</td><td>1~2분</td><td>이번 파트가 왜 필요한지 동기 부여, 실무 맥락 연결</td></tr>
-      <tr><td>전개</td><td>12~15분</td><td>소단원별 개념 설명 + 비유 + 확인 질문</td></tr>
-      <tr><td>정리</td><td>2~3분</td><td>핵심 요약, 배운 내용 재확인, 질의응답 예고</td></tr>
-      </table>
-      <div class="script">&quot;안녕하세요. 오늘은 Private LLM Infra 중에서 [파트명]을 함께 살펴보겠습니다. 이 파트가 끝나면 여러분은 [학습목표 한 줄 요약]을 할 수 있게 됩니다. 실무에서 실제로 어떤 고민을 할 때 이 내용이 쓰이는지부터 짚어보겠습니다.&quot;</div>
-    </div>
-
-    <div class="card">
-      <h3>파트 전환 멘트 예시 (모든 파트를 이어서 설명하는 경우)</h3>
-      <div class="script">Part 1 → Part 2: "지금까지는 모델이 올라갈 자리, 즉 인프라를 봤습니다. 이제 그 인프라 위에서 모델이 실제로 요청에 응답할 때 무엇이 병목이 되는지, 서빙 관점으로 넘어가겠습니다."</div>
-      <div class="script">Part 2 → Part 3: "서빙까지 잘 만들었다면, 이제 남은 건 운영입니다. 배포한 뒤에 이 시스템이 잘 동작하는지 어떻게 확인하고, 어떻게 안전하게 지킬지를 살펴보겠습니다."</div>
-    </div>
-
-    <div class="card">
-      <h3>예상 질문 대비 (질의응답 15분 대비)</h3>
-      <table>
-      <tr><th>예상 질문</th><th>답변 방향</th></tr>
-      <tr><td>On-prem과 Cloud 중 실무에서는 어떤 걸 더 많이 쓰나요?</td><td>초기 스타트업은 Cloud로 시작해 트래픽이 커지면 Hybrid나 On-prem 비중을 늘리는 경우가 많다고 설명</td></tr>
-      <tr><td>PagedAttention이 없으면 어떤 문제가 생기나요?</td><td>메모리를 미리 넉넉히 예약해야 해서 동시 처리 가능한 요청 수가 줄어드는 점을 예시로 설명</td></tr>
-      <tr><td>가드레일을 다 넣으면 응답 속도가 느려지지 않나요?</td><td>실제로 지연시간이 늘어날 수 있어, 리스크가 큰 영역부터 우선 적용하는 절충이 필요하다고 설명</td></tr>
-      </table>
-    </div>
-
   </section>
 
   <section class="section" id="s-part1">

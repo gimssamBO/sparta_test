@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_교안/03_Part3_LLMOps.md",
+                "file": "01_교안/00_개요.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03_Part3_LLMOps"
+              "title": "00_개요"
             }
           }
         ],
@@ -217,24 +217,24 @@
       "bases:새 베이스 생성하기": false
     }
   },
-  "active": "33ce6a1ff412e4c5",
+  "active": "f7c7066e7102e16d",
   "lastOpenFiles": [
-    "pdf/PrivateLLMInfra_Part3_LLMOps.pdf",
-    "pdf/PrivateLLMInfra_Part2_PrivateLLM서빙.pdf",
-    "pdf/PrivateLLMInfra_Part1_클라우드인프라.pdf",
-    "index.html",
-    "pdf",
-    "GitHub_배포용/README.md",
-    "GitHub_배포용/pdf/PrivateLLMInfra_Part3_LLMOps.pdf",
-    "GitHub_배포용/pdf/PrivateLLMInfra_Part2_PrivateLLM서빙.pdf",
-    "GitHub_배포용/pdf/PrivateLLMInfra_Part1_클라우드인프라.pdf",
-    "GitHub_배포용/index.html",
-    "GitHub_배포용/pdf",
-    "GitHub_배포용",
-    "01_교안/02_Part2_PrivateLLM서빙.md",
+    "07_산출물/PrivateLLMInfra_Part1_클라우드인프라.pdf",
     "01_교안/03_Part3_LLMOps.md",
-    "02_이미지/Pasted image 20260907145420.png",
+    "_backup/root/index.html.20260908_021513.bak",
+    "_backup/07_산출물/PrivateLLMInfra_웹교안.20260908_021509.bak.html",
     "01_교안/01_Part1_클라우드인프라.md",
+    "01_교안/02_Part2_PrivateLLM서빙.md",
+    "_backup/root/index.html.20260908_020314.bak",
+    "_backup/07_산출물/PrivateLLMInfra_웹교안.20260908_020310.bak.html",
+    "_backup/root/index.html.20260908_012849.bak",
+    "_backup/07_산출물/PrivateLLMInfra_웹교안.20260908_012845.bak.html",
+    "_backup/root/index.html.20260908_010158.bak",
+    "_backup/root",
+    "_backup/07_산출물/PrivateLLMInfra_웹교안.20260908_010012.bak.html",
+    "pdf/PrivateLLMInfra_Part3_LLMOps.pdf",
+    "GitHub_배포용/README.md",
+    "02_이미지/Pasted image 20260907145420.png",
     "Pasted image 20260907145420.png",
     "01_교안/00_개요.md",
     "README.md",
